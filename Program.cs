@@ -1,3 +1,4 @@
+using BookRecords.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +20,15 @@ builder.Services.AddAuthorization(options =>
 });
 var connectionString = builder.Configuration.GetConnectionString("dbConnection");
 
-//builder.Services.AddDbContext<recordsentityContext>(
-//    dbContextOptions => dbContextOptions
-//        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-        // The following three options help with debugging, but should
-        // be changed or removed for production.
-//        .LogTo(Console.WriteLine, LogLevel.Information)
-//        .EnableSensitiveDataLogging()
-//        .EnableDetailedErrors()
-//);
+builder.Services.AddDbContext<book_recordsContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+// The following three options help with debugging, but should
+// be changed or removed for production.
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors()
+);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
