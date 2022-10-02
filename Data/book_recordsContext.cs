@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using BookRecords.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace BookRecords.Models
+namespace BookRecords.Data
 {
     public partial class book_recordsContext : DbContext
     {
@@ -26,7 +27,7 @@ namespace BookRecords.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

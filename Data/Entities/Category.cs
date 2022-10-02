@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BookRecords.Models
+namespace BookRecords.Data.Entities
 {
     public partial class Category
     {

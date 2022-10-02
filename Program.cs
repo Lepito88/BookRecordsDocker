@@ -1,4 +1,4 @@
-using BookRecords.Models;
+using BookRecords.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
