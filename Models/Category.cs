@@ -7,5 +7,7 @@ namespace BookRecords.Models
     {
         public int Idcategory { get; set; }
         public string Name { get; set; } = null!;
+
+        public virtual BookCategory? BookCategory { get; set; }
     }
 }

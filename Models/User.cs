@@ -13,5 +13,7 @@ namespace BookRecords.Models
         public string? Lastname { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        public virtual UserBook? UserBook { get; set; }
     }
 }
