@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookRecords.Data
 {
-    public partial class book_recordsContext : DbContext
+    public partial class BookRecordsContext : DbContext
     {
-        public book_recordsContext()
+        public BookRecordsContext()
         {
         }
 
-        public book_recordsContext(DbContextOptions<book_recordsContext> options)
+        public BookRecordsContext(DbContextOptions<BookRecordsContext> options)
             : base(options)
         {
         }

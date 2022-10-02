@@ -18,10 +18,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
 });
-var connectionString = builder.Configuration.GetConnectionString("dbConnection");
+string connectionString = builder.Configuration.GetConnectionString("dbConnection");
 
-builder.Services.AddDbContext<book_recordsContext>(
-    dbContextOptions => dbContextOptions
+builder.Services.AddDbContext<BookRecordsContext>(
+    DbContextOptions => DbContextOptions
         .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 // The following three options help with debugging, but should
 // be changed or removed for production.
