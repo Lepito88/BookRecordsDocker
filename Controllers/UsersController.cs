@@ -55,6 +55,7 @@ namespace BookRecords.Controllers
 
             try
             {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
