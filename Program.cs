@@ -20,6 +20,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
 });
 
+//string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tonil\\Documents\\BookRecords.mdf;";
 //string connectionString = builder.Configuration.GetConnectionString("dbConnection");
 //var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
@@ -27,7 +28,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddDbContext<bookrecordsContext>(
     DbContextOptions => DbContextOptions
         .UseMySql(Environment.GetEnvironmentVariable("DATABASE_URL"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DATABASE_URL")))
-        //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+        //.UseSqlServer(connectionString)
         // The following three options help with debugging, but should
         // be changed or removed for production.
         .LogTo(Console.WriteLine, LogLevel.Information)
