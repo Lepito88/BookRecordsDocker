@@ -14,9 +14,9 @@ namespace BookRecords.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly BookRecordsContext _context;
+        private readonly bookrecordsContext _context;
 
-        public AuthorsController(BookRecordsContext context)
+        public AuthorsController(bookrecordsContext context)
         {
             _context = context;
         }

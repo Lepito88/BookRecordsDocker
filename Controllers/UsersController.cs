@@ -14,9 +14,9 @@ namespace BookRecords.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly BookRecordsContext _context;
+        private readonly bookrecordsContext _context;
 
-        public UsersController(BookRecordsContext context)
+        public UsersController(bookrecordsContext context)
         {
             _context = context;
         }
@@ -33,7 +33,6 @@ namespace BookRecords.Controllers
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-
             if (user == null)
             {
                 return NotFound();
@@ -56,6 +55,7 @@ namespace BookRecords.Controllers
 
             try
             {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -78,6 +78,7 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
