@@ -46,6 +46,7 @@ namespace BookRecords.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
+            //check if id in url is same as iduser in user object
             if (id != user.Iduser)
             {
                 return BadRequest();
@@ -78,11 +79,18 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Iduser }, user);
+            //If user exist (check if username exist), return badrequest
+            if (UsernameExists(user.Username))
+            {
+                return Content("Username already exists");
+            }
+            else
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetUser), new { id = user.Iduser }, user);
+            }
         }
 
         // DELETE: api/Users/5
@@ -95,15 +103,29 @@ namespace BookRecords.Controllers
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return NoContent();
 
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+                
+            }
             return NoContent();
         }
 
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Iduser == id);
+        }
+        //
+        private bool UsernameExists(string username)
+        {
+            return _context.Users.Any(e => e.Username == username);
         }
     }
 }
