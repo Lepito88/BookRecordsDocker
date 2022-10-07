@@ -8,3 +8,22 @@ Inpdependent project for Developer bootcamp 2022. This version requires Docker i
 
 # Configuration
 # Endpoints
+ ### User
+ -
+
+ ### UserBooks
+ -
+
+ ### Categories
+ -
+ ### Books
+ -
+
+ ### BookCategories
+ -
+
+ ### Author
+ -
+
+ ### AuthorBooks
+ -

@@ -5,14 +5,21 @@ namespace BookRecords.Data.Entities
 {
     public partial class Book
     {
+        public Book()
+        {
+            Idauthors = new HashSet<Author>();
+            Idcategories = new HashSet<Category>();
+            Idusers = new HashSet<User>();
+        }
+
         public int Idbook { get; set; }
-        public string Name { get; set; } = null!;
+        public string BookName { get; set; } = null!;
         public DateTime? ReleaseYear { get; set; }
         public string? Type { get; set; }
         public string? Isbn { get; set; }
 
-        public virtual AuthorBook? AuthorBook { get; set; }
-        public virtual BookCategory? BookCategory { get; set; }
-        public virtual UserBook? UserBook { get; set; }
+        public virtual ICollection<Author> Idauthors { get; set; }
+        public virtual ICollection<Category> Idcategories { get; set; }
+        public virtual ICollection<User> Idusers { get; set; }
     }
 }

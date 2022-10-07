@@ -6,28 +6,24 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookRecords.Data
 {
-    public partial class BookRecordsContext : DbContext
+    public partial class bookrecordsContext : DbContext
     {
-        public BookRecordsContext()
+        public bookrecordsContext()
         {
         }
 
-        public BookRecordsContext(DbContextOptions<BookRecordsContext> options)
+        public bookrecordsContext(DbContextOptions<bookrecordsContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<Author> Authors { get; set; } = null!;
-        public virtual DbSet<AuthorBook> AuthorBooks { get; set; } = null!;
         public virtual DbSet<Book> Books { get; set; } = null!;
-        public virtual DbSet<BookCategory> BookCategories { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
-        public virtual DbSet<UserBook> UserBooks { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,37 +47,27 @@ namespace BookRecords.Data
                 entity.Property(e => e.Lastname)
                     .HasMaxLength(255)
                     .HasColumnName("lastname");
-            });
 
-            modelBuilder.Entity<AuthorBook>(entity =>
-            {
-                entity.HasKey(e => new { e.Idauthor, e.Idbook })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.HasMany(d => d.Idbooks)
+                    .WithMany(p => p.Idauthors)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "AuthorBook",
+                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_authorbooks"),
+                        r => r.HasOne<Author>().WithMany().HasForeignKey("Idauthor").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_author_authorbooks"),
+                        j =>
+                        {
+                            j.HasKey("Idauthor", "Idbook").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                entity.ToTable("author_books");
+                            j.ToTable("author_books");
 
-                entity.HasIndex(e => e.Idauthor, "fk_author_authorbooks_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Idauthor" }, "fk_author_authorbooks_idx");
 
-                entity.HasIndex(e => e.Idbook, "fk_book_authorbooks_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Idbook" }, "fk_book_authorbooks_idx");
 
-                entity.Property(e => e.Idauthor).HasColumnName("idauthor");
+                            j.IndexerProperty<int>("Idauthor").HasColumnName("idauthor");
 
-                entity.Property(e => e.Idbook).HasColumnName("idbook");
-
-                entity.HasOne(d => d.IdauthorNavigation)
-                    .WithOne(p => p.AuthorBook)
-                    .HasForeignKey<AuthorBook>(d => d.Idauthor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_author_authorbooks");
-
-                entity.HasOne(d => d.IdbookNavigation)
-                    .WithOne(p => p.AuthorBook)
-                    .HasForeignKey<AuthorBook>(d => d.Idbook)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_book_authorbooks");
+                            j.IndexerProperty<int>("Idbook").HasColumnName("idbook");
+                        });
             });
 
             modelBuilder.Entity<Book>(entity =>
@@ -93,52 +79,40 @@ namespace BookRecords.Data
 
                 entity.Property(e => e.Idbook).HasColumnName("idbook");
 
-                entity.Property(e => e.Isbn)
+                entity.Property(e => e.BookName)
                     .HasMaxLength(255)
+                    .HasColumnName("book_name");
+
+                entity.Property(e => e.Isbn)
+                    .HasMaxLength(20)
                     .HasColumnName("isbn");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.ReleaseYear)
-                    .HasColumnType("datetime")
-                    .HasColumnName("release_year");
+                entity.Property(e => e.ReleaseYear).HasColumnName("release_year");
 
                 entity.Property(e => e.Type)
-                    .HasColumnType("enum('Sidottu','Nidottu','Digitaalinen')")
+                    .HasColumnType("enum('Hardcover','Paperback','Digital','Comicbook')")
                     .HasColumnName("type");
-            });
 
-            modelBuilder.Entity<BookCategory>(entity =>
-            {
-                entity.HasKey(e => new { e.Idbook, e.Idcategory })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.HasMany(d => d.Idcategories)
+                    .WithMany(p => p.Idbooks)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "BookCategory",
+                        l => l.HasOne<Category>().WithMany().HasForeignKey("Idcategory").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_bookcategories"),
+                        r => r.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_bookcategories"),
+                        j =>
+                        {
+                            j.HasKey("Idbook", "Idcategory").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                entity.ToTable("book_categories");
+                            j.ToTable("book_categories");
 
-                entity.HasIndex(e => e.Idbook, "fk_book_bookcategories_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Idbook" }, "fk_book_bookcategories_idx");
 
-                entity.HasIndex(e => e.Idcategory, "fk_category_bookcategories_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Idcategory" }, "fk_category_bookcategories_idx");
 
-                entity.Property(e => e.Idbook).HasColumnName("idbook");
+                            j.IndexerProperty<int>("Idbook").HasColumnName("idbook");
 
-                entity.Property(e => e.Idcategory).HasColumnName("idcategory");
-
-                entity.HasOne(d => d.IdbookNavigation)
-                    .WithOne(p => p.BookCategory)
-                    .HasForeignKey<BookCategory>(d => d.Idbook)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_book_bookcategories");
-
-                entity.HasOne(d => d.IdcategoryNavigation)
-                    .WithOne(p => p.BookCategory)
-                    .HasForeignKey<BookCategory>(d => d.Idcategory)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_category_bookcategories");
+                            j.IndexerProperty<int>("Idcategory").HasColumnName("idcategory");
+                        });
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -152,9 +126,9 @@ namespace BookRecords.Data
                     .ValueGeneratedNever()
                     .HasColumnName("idcategory");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.CategoryName)
                     .HasMaxLength(255)
-                    .HasColumnName("name");
+                    .HasColumnName("category_name");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -198,37 +172,27 @@ namespace BookRecords.Data
                 entity.Property(e => e.Username)
                     .HasMaxLength(100)
                     .HasColumnName("username");
-            });
 
-            modelBuilder.Entity<UserBook>(entity =>
-            {
-                entity.HasKey(e => new { e.Iduser, e.Idbook })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.HasMany(d => d.Idbooks)
+                    .WithMany(p => p.Idusers)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "UserBook",
+                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_userbooks"),
+                        r => r.HasOne<User>().WithMany().HasForeignKey("Iduser").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_user_userbooks"),
+                        j =>
+                        {
+                            j.HasKey("Iduser", "Idbook").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                entity.ToTable("user_books");
+                            j.ToTable("user_books");
 
-                entity.HasIndex(e => e.Idbook, "fk_book_userbooks_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Idbook" }, "fk_book_userbooks_idx");
 
-                entity.HasIndex(e => e.Iduser, "fk_user_userbooks_idx")
-                    .IsUnique();
+                            j.HasIndex(new[] { "Iduser" }, "fk_user_userbooks_idx");
 
-                entity.Property(e => e.Iduser).HasColumnName("iduser");
+                            j.IndexerProperty<int>("Iduser").HasColumnName("iduser");
 
-                entity.Property(e => e.Idbook).HasColumnName("idbook");
-
-                entity.HasOne(d => d.IdbookNavigation)
-                    .WithOne(p => p.UserBook)
-                    .HasForeignKey<UserBook>(d => d.Idbook)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_book_userbooks");
-
-                entity.HasOne(d => d.IduserNavigation)
-                    .WithOne(p => p.UserBook)
-                    .HasForeignKey<UserBook>(d => d.Iduser)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_user_userbooks");
+                            j.IndexerProperty<int>("Idbook").HasColumnName("idbook");
+                        });
             });
 
             OnModelCreatingPartial(modelBuilder);
