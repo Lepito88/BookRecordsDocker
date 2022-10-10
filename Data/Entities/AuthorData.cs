@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace BookRecords.Data.Entities
+﻿namespace BookRecords.Data.Entities
 {
-    public partial class Author
+    public class AuthorData
     {
-        public Author()
+        public AuthorData()
         {
             Books = new HashSet<Book>();
         }
@@ -15,10 +11,10 @@ namespace BookRecords.Data.Entities
         public string Firstname { get; set; } = null!;
         public string Lastname { get; set; } = null!;
 
-        [JsonIgnore]
         public virtual ICollection<Book> Books { get; set; }
 
-        public string GetFullname() {
+        public string GetFullname()
+        {
             return Firstname + ' ' + Lastname;
         }
     }
