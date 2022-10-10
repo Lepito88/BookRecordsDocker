@@ -12,7 +12,7 @@ Tasks to do:
 - Attach / Detach Category to Book [DONE]
 
 - Get user's books (Books that are owned by the user) => [DONE], Shows User, book, book's author and book's categories
-- Get author's books (Books that author has written)[]
+- Get author's books (Books that author has written)[DONE]
 - Get book's categories (Categories that book belongs to) [DONE], GetBookById shows book's authors, categories
 - Think about ENDPOINT URLs for Adding/removing author,category,book etc
 
