@@ -10,7 +10,7 @@ Tasks to do:
 - Attach / Detach Book to Author
 - Attach / Detach Category to Book
 
-- Get user's books (Books that are owned by the user)
+- Get user's books (Books that are owned by the user) => partly done, Shows User, book, book's author and book's categories
 - Get author's books (Books that author has written)
 - Get book's categories (Categories that book belongs to)
 
@@ -20,8 +20,8 @@ Tasks to do:
 ## Medium => if there is time
 - JWT token creation & validation (Belongs to login & logout)
 - Input validation
-- Null validation & checking => How to implement this??
-- Database securing??
+- Null value validation & Handling & checking. => DATABASE null value handling
+- Database securing?? => e.g. environment variables, connection strings etc.
 - Possible roles (User, Admin, etc.)
 - Double value checking when creating Database objects => no double values in DB
 - Data validation => Are all parameters valid etc.

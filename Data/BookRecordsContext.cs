@@ -48,8 +48,8 @@ namespace BookRecords.Data
                     .HasMaxLength(255)
                     .HasColumnName("lastname");
 
-                entity.HasMany(d => d.Idbooks)
-                    .WithMany(p => p.Idauthors)
+                entity.HasMany(d => d.Books)
+                    .WithMany(p => p.Authors)
                     .UsingEntity<Dictionary<string, object>>(
                         "AuthorBook",
                         l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_authorbooks"),
@@ -93,8 +93,8 @@ namespace BookRecords.Data
                     .HasColumnType("enum('Hardcover','Paperback','Digital','Comicbook')")
                     .HasColumnName("type");
 
-                entity.HasMany(d => d.Idcategories)
-                    .WithMany(p => p.Idbooks)
+                entity.HasMany(d => d.Categories)
+                    .WithMany(p => p.Books)
                     .UsingEntity<Dictionary<string, object>>(
                         "BookCategory",
                         l => l.HasOne<Category>().WithMany().HasForeignKey("Idcategory").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_bookcategories"),
@@ -173,8 +173,8 @@ namespace BookRecords.Data
                     .HasMaxLength(100)
                     .HasColumnName("username");
 
-                entity.HasMany(d => d.Idbooks)
-                    .WithMany(p => p.Idusers)
+                entity.HasMany(d => d.Books)
+                    .WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
                         "UserBook",
                         l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_userbooks"),

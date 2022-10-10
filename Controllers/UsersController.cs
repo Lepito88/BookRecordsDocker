@@ -10,6 +10,7 @@ using BookRecords.Data.Entities;
 
 namespace BookRecords.Controllers
 {
+    //This controller contains basig CRUD METHODS for User class, (For the admin)
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -32,7 +33,7 @@ namespace BookRecords.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);             
             if (user == null)
             {
                 return NotFound();

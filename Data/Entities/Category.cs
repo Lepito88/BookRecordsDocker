@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BookRecords.Data.Entities
 {
@@ -7,12 +8,12 @@ namespace BookRecords.Data.Entities
     {
         public Category()
         {
-            Idbooks = new HashSet<Book>();
+            Books = new HashSet<Book>();
         }
 
         public int Idcategory { get; set; }
         public string CategoryName { get; set; } = null!;
-
-        public virtual ICollection<Book> Idbooks { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Book> Books { get; set; }
     }
 }
