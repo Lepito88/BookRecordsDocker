@@ -51,7 +51,6 @@ namespace BookRecords.Controllers
             {
                 return BadRequest();
             }
-
             _context.Entry(category).State = EntityState.Modified;
 
             try
@@ -78,24 +77,28 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Categories.Add(category);
-            try
+            //if category is not null try to add it
+            if (category != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CategoryExists(category.Idcategory))
+                _context.Categories.Add(category);
+                try
                 {
-                    return Conflict();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateException)
                 {
-                    throw;
+                    if (CategoryNameExists(category.Idcategory, category.CategoryName) || CategoryExists(category.Idcategory) || CategoryExistsByName(category.CategoryName))
+                    {
+                        return Conflict("Category already exists");
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return CreatedAtAction(nameof(GetCategory), new { id = category.Idcategory }, category);
             }
-
-            return CreatedAtAction("GetCategory", new { id = category.Idcategory }, category);
+            return BadRequest();
         }
 
         // DELETE: api/Categories/5
@@ -107,9 +110,17 @@ namespace BookRecords.Controllers
             {
                 return NotFound();
             }
+            try
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+
+                throw;
+            }
 
             return NoContent();
         }
@@ -117,6 +128,14 @@ namespace BookRecords.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Idcategory == id);
+        }
+        private bool CategoryNameExists(int id, string name)
+        {
+            return _context.Categories.Any(e => e.CategoryName == name && e.Idcategory == id);
+        }
+        private bool CategoryExistsByName(string name)
+        {
+            return _context.Categories.Any(e => e.CategoryName == name);
         }
     }
 }
