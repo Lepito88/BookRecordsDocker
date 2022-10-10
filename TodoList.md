@@ -14,6 +14,7 @@ Tasks to do:
 - Get user's books (Books that are owned by the user) => [DONE], Shows User, book, book's author and book's categories
 - Get author's books (Books that author has written)[]
 - Get book's categories (Categories that book belongs to) [DONE], GetBookById shows book's authors, categories
+- Think about ENDPOINT URLs for Adding/removing author,category,book etc
 
 - Login method => e.g. Ask username & password => Validate them and check if they exists => create JWT token => return it.
 - Logout method => revoke JWT token or delete from local storage etc.
