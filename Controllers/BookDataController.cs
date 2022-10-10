@@ -50,7 +50,7 @@ namespace BookRecords.Controllers
 
             return book;
         }
-
+    
         // PUT: api/BookData/5/Author/1/add
         [HttpPut("{idbook}/author/{idauthor}/add")]
         public async Task<IActionResult> AddAuthorToBook(int idbook, int idauthor )
@@ -116,6 +116,90 @@ namespace BookRecords.Controllers
             }
             //remove Author from Book
             book.Authors.Remove(author);
+
+            _context.Entry(book).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookExists(idbook))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        // PUT: api/BookData/5/Category/1/add
+        [HttpPut("{idbook}/category/{idcategory}/add")]
+        public async Task<IActionResult> AddCategoryToBook(int idbook, int idcategory)
+        {
+            var book = await _context.Books
+                 .Where(book => book.Idbook == idbook)
+                 .Include(_ => _.Categories)
+                 .FirstOrDefaultAsync();
+            if (book == null)
+            {
+                return NotFound("Book not found");
+            }
+            // find Category
+            var category = await _context.Categories.FindAsync(idcategory);
+
+            if (category == null)
+            {
+                return NotFound("Category not found");
+            }
+            //Add Author to Book
+            book.Categories.Add(category);
+
+            _context.Entry(book).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookExists(idbook))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        // PUT: api/BookData/5/Category/1/remove
+        [HttpPut("{idbook}/category/{idcategory}/remove")]
+        public async Task<IActionResult> RemoveCategoryFromBook(int idbook, int idcategory)
+        {
+            var book = await _context.Books
+                 .Where(book => book.Idbook == idbook)
+                 .Include(_ => _.Categories)
+                 .FirstOrDefaultAsync();
+            if (book == null)
+            {
+                return NotFound("Book not found");
+            }
+            // find Category
+            var category = await _context.Categories.FindAsync(idcategory);
+
+            if (category == null)
+            {
+                return NotFound("Category not found");
+            }
+            //Add Author to Book
+            book.Categories.Remove(category);
 
             _context.Entry(book).State = EntityState.Modified;
 
