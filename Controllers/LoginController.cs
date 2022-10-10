@@ -19,18 +19,25 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-            //Find user
-            var user = await _context.Users
-                .Where(x => x.Username == login.username)
-                .FirstAsync();
+            try
+            {
+                //Find user
+                var user = await _context.Users
+                    .Where(x => x.Username == login.username)
+                    .FirstOrDefaultAsync();
 
-            if (user is null || !BCrypt.Net.BCrypt.Verify(login.password, user.Password))
-            {
-                return new OkObjectResult(false);
-            }else
-            {
-                return new OkObjectResult(true);
+                if (user is null)
+                {
+                    return new OkObjectResult(false);
+                }
+                return !BCrypt.Net.BCrypt.Verify(login.password, user.Password) ? new OkObjectResult(false) : (IActionResult)new OkObjectResult(true);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+           
         }
     }
 }
