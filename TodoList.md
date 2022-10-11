@@ -12,10 +12,12 @@ Tasks to do:
 - Attach / Detach Category to Book [DONE]
 
 - Get user's books (Books that are owned by the user) => [DONE], Shows User, book, book's author and book's categories
-- Get author's books (Books that author has written)[]
+- Get author's books (Books that author has written)[DONE]
 - Get book's categories (Categories that book belongs to) [DONE], GetBookById shows book's authors, categories
-- Think about ENDPOINT URLs for Adding/removing author,category,book etc
+- Simple username & password login [DONE]
 
+
+- Think about ENDPOINT URLs for Adding/removing author,category,book etc
 - Login method => e.g. Ask username & password => Validate them and check if they exists => create JWT token => return it.
 - Logout method => revoke JWT token or delete from local storage etc.
 
@@ -28,7 +30,7 @@ Tasks to do:
 - Double value checking when creating Database objects => no double values in DB
 - Data validation => Are all parameters valid etc.
 - Use of DTOs (Data Transfer Objects)
-- API security => what belngs under this category?
+- API security => what belongs under this category?
 - Possible image upload for profile?
 - User's profile data
 
