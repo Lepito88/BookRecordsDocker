@@ -42,8 +42,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
-//builder.Services.AddTransient<IBookService, BookService>();
-//builder.Services.AddTransient<IAuthorService, AuthorService>();
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 //builder.Services.AddTransient<ICategoryService, CategoryService>();
 //builder.Services.AddTransient<IUserService, UserService>();
 
@@ -51,14 +52,14 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 //DATABASE CONNECTIONS
 
 //string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\tonil\\Documents\\BookRecords.mdf;";
-string connectionString = builder.Configuration.GetConnectionString("dbConnection");
+//string connectionString = builder.Configuration.GetConnectionString("dbConnection");
 //var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 
 builder.Services.AddDbContext<bookrecordsContext>(
     DbContextOptions => DbContextOptions
-        //.UseMySql(Environment.GetEnvironmentVariable("DATABASE_URL"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DATABASE_URL")))
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+        .UseMySql(Environment.GetEnvironmentVariable("DATABASE_URL"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DATABASE_URL")))
+        //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         //.UseSqlServer(connectionString)
         // The following three options help with debugging, but should
         // be changed or removed for production.

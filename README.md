@@ -68,3 +68,14 @@ Endpoints are listed as following format: Method: URL
      - Parameters for PUT:
  - DELETE: /author/{id}
    - Delete author from database.
+
+
+  ## ERRORCODES USED IN RESPONSES
+  - L01 : Username or Email not found
+  - L02 : Invalid Password
+  - L03 : Unable to logout user
+
+  - R01 : User already exists with same Email or Username
+  - R02 : Password and confirm password do not match
+  - R03 : Password is weak
+  - R04 : Unable to save user
