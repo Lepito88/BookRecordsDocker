@@ -16,12 +16,11 @@ namespace BookRecords.Controllers
     [ApiController]
     public class AuthorsController : BaseApiController
     {
-        private readonly bookrecordsContext _context;
+        
         private readonly IAuthorService _authorService;
 
-        public AuthorsController(bookrecordsContext context, IAuthorService authorService)
+        public AuthorsController(IAuthorService authorService)
         {
-            _context = context;
             _authorService = authorService;
         }
 
@@ -38,7 +37,7 @@ namespace BookRecords.Controllers
                 Idauthor = o.Idauthor,
                 Firstname = o.Firstname, 
                 Lastname = o.Lastname
-            }); ;
+            });
 
             return Ok(authorsResponse);
         }

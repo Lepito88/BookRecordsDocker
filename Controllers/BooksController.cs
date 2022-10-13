@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookRecords.Data;
 using BookRecords.Data.Entities;
+using BookRecords.Interfaces;
+using BookRecords.Responses.Authors;
+using BookRecords.Responses.Books;
+using BookRecords.Services;
 
 namespace BookRecords.Controllers
 {
@@ -14,32 +18,58 @@ namespace BookRecords.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly bookrecordsContext _context;
+        private readonly IBookService _bookService;
 
-        public BooksController(bookrecordsContext context)
+        public BooksController(IBookService bookService)
         {
-            _context = context;
+            _bookService = bookService;
         }
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return await _context.Books.ToListAsync();
+            var getBooksResponse = await _bookService.GetBooksAsync();
+
+            if (!getBooksResponse.Success)
+            {
+                return BadRequest();
+            }
+
+            var booksResponse = getBooksResponse.Books.ConvertAll(o => new BookResponse
+            {
+                Idbook = o.Idbook,
+                BookName = o.BookName,
+                Type = o.Type,
+                Isbn = o.Isbn,
+                ReleaseYear = (DateTime)o.ReleaseYear
+                
+            });
+
+            return Ok(booksResponse);
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<IActionResult> GetBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+            var bookResponse = await _bookService.GetBookByIdAsync(id);
 
-            if (book == null)
+            if (!bookResponse.Success)
             {
                 return NotFound();
             }
 
-            return book;
+            return Ok(new BookResponse
+            {
+                Idbook=bookResponse.Idbook,
+                BookName=bookResponse.BookName,
+                Type=bookResponse.Type,
+                Isbn=bookResponse.Isbn,
+                ReleaseYear=bookResponse.ReleaseYear,
+                Authors = bookResponse.Authors,
+                Categories = bookResponse.Categories
+            });
         }
 
         // PUT: api/Books/5
@@ -52,22 +82,11 @@ namespace BookRecords.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(book).State = EntityState.Modified;
+            var bookResponse = await _bookService.UpdateBookAsync(id, book);
 
-            try
+            if (!bookResponse.Success)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(book);
             }
 
             return NoContent();
@@ -78,8 +97,12 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
+            var bookResponse = await _bookService.CreateBookAsync(book);
+
+            if (!bookResponse.Success)
+            {
+                return UnprocessableEntity(book);
+            }
 
             return CreatedAtAction("GetBook", new { id = book.Idbook }, book);
         }
@@ -88,21 +111,14 @@ namespace BookRecords.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            var bookResponse = await _bookService.DeleteBookAsync(id);
+            if (!bookResponse.Success)
             {
-                return NotFound();
+                return BadRequest();
             }
-
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool BookExists(int id)
-        {
-            return _context.Books.Any(e => e.Idbook == id);
-        }
     }
 }

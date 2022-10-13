@@ -6,6 +6,11 @@ namespace BookRecords.Services
 {
     public class CategoryService : ICategoryService
     {
+        public Task<CategoryResponse> CreateCategoryAsync(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<CategoryResponse> DeleteCategoryAsync(int id)
         {
             throw new NotImplementedException();
