@@ -116,7 +116,6 @@ namespace BookRecords.Controllers
                 return BadRequest(e.Message);
                 
             }
-            return NoContent();
         }
 
         private bool UserExists(int id)

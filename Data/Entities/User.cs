@@ -8,6 +8,7 @@ namespace BookRecords.Data.Entities
         public User()
         {
             Books = new HashSet<Book>();
+            RefreshTokens = new HashSet<RefreshToken>();
         }
 
         public int Iduser { get; set; }
@@ -19,6 +20,7 @@ namespace BookRecords.Data.Entities
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<Book> Books { get; set; }
     }
 }
