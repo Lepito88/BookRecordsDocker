@@ -45,7 +45,7 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
-//builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 //builder.Services.AddTransient<IUserService, UserService>();
 
 

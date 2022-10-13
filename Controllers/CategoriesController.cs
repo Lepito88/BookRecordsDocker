@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookRecords.Data;
 using BookRecords.Data.Entities;
+using BookRecords.Interfaces;
+using BookRecords.Responses.Categories;
+using BookRecords.Responses.Books;
+using BookRecords.Services;
 
 namespace BookRecords.Controllers
 {
@@ -15,31 +19,51 @@ namespace BookRecords.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly bookrecordsContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(bookrecordsContext context)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
-        }
-
-        // GET: api/Categories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
+            var getCategoriesResponse = await _categoryService.GetCategoriesAsync();
+            if (!getCategoriesResponse.Success)
             {
                 return NotFound();
             }
 
-            return category;
+            var categoriesResponse = getCategoriesResponse.Categories.ConvertAll(o => new CategoryResponse
+            {
+                Idcategory = o.Idcategory,
+                CategoryName = o.CategoryName,
+
+            });
+
+            return Ok(categoriesResponse);
+
+           
+        }
+
+        // GET: api/Categories/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategory(int id)
+        {
+            var categoryResponse = await _categoryService.GetCategoryByIdAsync(id);
+
+            if (!categoryResponse.Success)
+            {
+                return NotFound();
+            }
+
+            return Ok(new CategoryResponse
+            {
+                Idcategory = categoryResponse.Idcategory,
+                CategoryName = categoryResponse.CategoryName,
+            });
         }
 
         // PUT: api/Categories/5
@@ -51,22 +75,12 @@ namespace BookRecords.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(category).State = EntityState.Modified;
 
-            try
+            var categoryResponse = await _categoryService.UpdateCategoryAsync(id, category);
+
+            if (!categoryResponse.Success)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(category);
             }
 
             return NoContent();
@@ -75,51 +89,27 @@ namespace BookRecords.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<IActionResult> PostCategory(Category category)
         {
-            //if category is not null try to add it
-            if (category != null)
+            var categoryResponse = await _categoryService.CreateCategoryAsync(category);
+
+            if (!categoryResponse.Success)
             {
-                _context.Categories.Add(category);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException)
-                {
-                    if (CategoryNameExists(category.Idcategory, category.CategoryName) || CategoryExists(category.Idcategory) || CategoryExistsByName(category.CategoryName))
-                    {
-                        return Conflict("Category already exists");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return CreatedAtAction(nameof(GetCategory), new { id = category.Idcategory }, category);
+                return UnprocessableEntity(category);
             }
-            return BadRequest();
+
+            return CreatedAtAction(nameof(GetCategory), new { id = category.Idcategory }, category);
+          
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var categoryResponse = await _categoryService.DeleteCategoryAsync(id);
+            if (!categoryResponse.Success)
             {
-                return NotFound();
-            }
-            try
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-
-            }
-            catch (DbUpdateException)
-            {
-
-                throw;
+                return BadRequest();
             }
 
             return NoContent();

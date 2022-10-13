@@ -1,34 +1,170 @@
-﻿using BookRecords.Data.Entities;
+﻿using BookRecords.Data;
+using BookRecords.Data.Entities;
 using BookRecords.Interfaces;
+using BookRecords.Responses.Books;
 using BookRecords.Responses.Categories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookRecords.Services
 {
     public class CategoryService : ICategoryService
     {
-        public Task<CategoryResponse> CreateCategoryAsync(Category category)
+        private readonly bookrecordsContext _context;
+
+        public CategoryService(bookrecordsContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<CategoryResponse> DeleteCategoryAsync(int id)
+        public async Task<GetCategoriesResponse> GetCategoriesAsync()
         {
-            throw new NotImplementedException();
+            var categories = await _context.Categories.ToListAsync();
+
+            if (categories.Count == 0)
+            {
+                return new GetCategoriesResponse
+                {
+                    Success = false,
+                    Error = "No categories found.",
+                    ErrorCode = "C01"
+                };
+            }
+            return new GetCategoriesResponse
+            {
+                Success = true,
+                Categories = categories
+            };
         }
 
-        public Task<GetCategoriesResponse> GetCategoriesAsync()
+        public async Task<CategoryResponse> GetCategoryByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FindAsync(id);
+            if (category is null)
+            {
+                return new CategoryResponse
+                {
+                    Success = false,
+                    Error = "Category not found",
+                    ErrorCode = "C02",
+                };
+            }
+
+            return new CategoryResponse
+            {
+                Success = true,
+                Idcategory = category.Idcategory,
+                CategoryName = category.CategoryName
+            };
+        }
+        public async Task<CategoryResponse> CreateCategoryAsync(Category category)
+        {
+            await _context.Categories.AddAsync(category);
+
+            var createResponse = await _context.SaveChangesAsync();
+
+            if (createResponse >= 0)
+            {
+                return new CategoryResponse
+                {
+                    Success = true,
+                    Idcategory = category.Idcategory,
+                    CategoryName=category.CategoryName
+                };
+            }
+            return new CategoryResponse
+            {
+                Success = false,
+                Error = "Unable to save Category",
+                ErrorCode = "C05"
+            };
         }
 
-        public Task<CategoryResponse> GetCategoryByIdAsync(int id)
+        public async Task<CategoryResponse> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return new CategoryResponse
+                {
+                    Success = false,
+                    Error = "Category Not Found",
+                    ErrorCode = "C02"
+                };
+            }
+
+            _context.Categories.Remove(category);
+            var deleteResponse = await _context.SaveChangesAsync();
+            if (deleteResponse >= 0)
+            {
+                return new CategoryResponse
+                {
+                    Success = true,
+                    Idcategory = category.Idcategory
+                };
+            }
+
+            return new CategoryResponse
+            {
+                Success = false,
+                Error = "Unable to delete category",
+                ErrorCode = "C03"
+
+            };
         }
 
-        public Task<CategoryResponse> UpdateCategoryAsync(int id, Book book)
+        public async Task<CategoryResponse> UpdateCategoryAsync(int id, Category category)
         {
-            throw new NotImplementedException();
+            if (id != category.Idcategory)
+            {
+                return new CategoryResponse
+                {
+                    Success = false,
+                    Error = "Unable to update category",
+                    ErrorCode = "C04"
+                };
+            }
+
+            _context.Entry(category).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CategoryExists(id))
+                {
+                    return new CategoryResponse
+                    {
+                        Success = false,
+                        Error = "Category Not found",
+                        ErrorCode = "C02",
+                    };
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return new CategoryResponse
+            {
+                Success = true,
+                Idcategory = category.Idcategory,
+                CategoryName = category.CategoryName,
+            };
+        }
+        private bool CategoryExists(int id)
+        {
+            return _context.Categories.Any(e => e.Idcategory == id);
         }
     }
 }
+/*
+ C01 :  No categories found.
+ C02 :  Category not found
+ C03 : Unable to delete category
+ C04 : Unable to update category
+ C05 : Unable to save Category
+ 
+ */

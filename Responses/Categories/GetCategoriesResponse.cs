@@ -1,8 +1,9 @@
-﻿namespace BookRecords.Responses.Categories
+﻿using BookRecords.Data.Entities;
+
+namespace BookRecords.Responses.Categories
 {
     public class GetCategoriesResponse : BaseResponse
     {
-        public int Idcategory { get; set; }
-        public string CategoryName { get; set; }
+        public List<Category> Categories { get; set; }
     }
 }

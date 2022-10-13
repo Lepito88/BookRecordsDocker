@@ -8,7 +8,7 @@ namespace BookRecords.Interfaces
         Task<GetCategoriesResponse> GetCategoriesAsync();
         Task<CategoryResponse> GetCategoryByIdAsync(int id);
         Task<CategoryResponse> CreateCategoryAsync(Category category);
-        Task<CategoryResponse> UpdateCategoryAsync(int id, Book book);
+        Task<CategoryResponse> UpdateCategoryAsync(int id, Category category);
         Task<CategoryResponse> DeleteCategoryAsync(int id);
     }
 }
