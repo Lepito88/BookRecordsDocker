@@ -84,7 +84,7 @@ namespace BookRecords.Services
         {
             var existingUser = await _context.Users.SingleOrDefaultAsync(user => user.Email == registerRequest.Email || user.Username == registerRequest.Username);
 
-            if (existingUser is null)
+            if (existingUser != null)
             {
                 return new RegisterResponse
                 {

@@ -98,7 +98,7 @@ namespace BookRecords.Controllers
                 return UnprocessableEntity(registerResponse);
             }
 
-            return Ok(registerResponse.Email);
+            return Ok(registerResponse);
         }
 
         [Authorize]
@@ -113,7 +113,7 @@ namespace BookRecords.Controllers
                 return UnprocessableEntity(logout);
             }
 
-            return Ok();
+            return Ok("Logged out");
         }
     }
 }

@@ -26,11 +26,11 @@ namespace BookRecords.Migrations
                 {
                     b.Property<int>("Idauthor")
                         .HasColumnType("int")
-                        .HasColumnName("idauthor");
+                        .HasColumnName("Idauthor");
 
                     b.Property<int>("Idbook")
                         .HasColumnType("int")
-                        .HasColumnName("idbook");
+                        .HasColumnName("Idbook");
 
                     b.HasKey("Idauthor", "Idbook")
                         .HasName("PRIMARY")
@@ -47,11 +47,11 @@ namespace BookRecords.Migrations
                 {
                     b.Property<int>("Idbook")
                         .HasColumnType("int")
-                        .HasColumnName("idbook");
+                        .HasColumnName("Idbook");
 
                     b.Property<int>("Idcategory")
                         .HasColumnType("int")
-                        .HasColumnName("idcategory");
+                        .HasColumnName("Idcategory");
 
                     b.HasKey("Idbook", "Idcategory")
                         .HasName("PRIMARY")
@@ -69,19 +69,19 @@ namespace BookRecords.Migrations
                     b.Property<int>("Idauthor")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("idauthor");
+                        .HasColumnName("Idauthor");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("firstname");
+                        .HasColumnName("Firstname");
 
                     b.Property<string>("Lastname")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("lastname");
+                        .HasColumnName("Lastname");
 
                     b.HasKey("Idauthor")
                         .HasName("PRIMARY");
@@ -94,26 +94,26 @@ namespace BookRecords.Migrations
                     b.Property<int>("Idbook")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("idbook");
+                        .HasColumnName("Idbook");
 
                     b.Property<string>("BookName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("book_name");
+                        .HasColumnName("BookName");
 
                     b.Property<string>("Isbn")
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
-                        .HasColumnName("isbn");
+                        .HasColumnName("Isbn");
 
                     b.Property<DateTime?>("ReleaseYear")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("release_year");
+                        .HasColumnName("ReleaseYear");
 
                     b.Property<string>("Type")
                         .HasColumnType("enum('Hardcover','Paperback','Digital','Comicbook')")
-                        .HasColumnName("type");
+                        .HasColumnName("Type");
 
                     b.HasKey("Idbook")
                         .HasName("PRIMARY");
@@ -125,13 +125,13 @@ namespace BookRecords.Migrations
                 {
                     b.Property<int>("Idcategory")
                         .HasColumnType("int")
-                        .HasColumnName("idcategory");
+                        .HasColumnName("Idcategory");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("category_name");
+                        .HasColumnName("CategoryName");
 
                     b.HasKey("Idcategory")
                         .HasName("PRIMARY");
@@ -178,51 +178,51 @@ namespace BookRecords.Migrations
                     b.Property<int>("Iduser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("iduser");
+                        .HasColumnName("Iduser");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("created_at")
+                        .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Email")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("email");
+                        .HasColumnName("Email");
 
                     b.Property<string>("Firstname")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("firstname");
+                        .HasColumnName("Firstname");
 
                     b.Property<string>("Lastname")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("lastname");
+                        .HasColumnName("Lastname");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("password");
+                        .HasColumnName("Password");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("updated_at")
+                        .HasColumnName("UpdatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("username");
+                        .HasColumnName("Username");
 
                     b.HasKey("Iduser")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "Username" }, "username_UNIQUE")
+                    b.HasIndex(new[] { "Username" }, "Username_UNIQUE")
                         .IsUnique();
 
                     b.ToTable("user", (string)null);
@@ -232,11 +232,11 @@ namespace BookRecords.Migrations
                 {
                     b.Property<int>("Iduser")
                         .HasColumnType("int")
-                        .HasColumnName("iduser");
+                        .HasColumnName("Iduser");
 
                     b.Property<int>("Idbook")
                         .HasColumnType("int")
-                        .HasColumnName("idbook");
+                        .HasColumnName("Idbook");
 
                     b.HasKey("Iduser", "Idbook")
                         .HasName("PRIMARY")

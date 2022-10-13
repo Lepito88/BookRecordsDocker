@@ -8,8 +8,8 @@ namespace BookRecords.Helpers
     public class TokenHelper
     {
         //TODO: MOVE THESE TO SECRETS FILE
-        public const string Issuer = "https://localhost";
-        public const string Audience = "https://localhost";
+        public const string Issuer = "localhost";
+        public const string Audience = "localhost";
         public const string Secret = "p0GXO6VuVZLRPef0tyO9jCqK4uZufDa6LP4n8Gj+8hQPB30f94pFiECAnPeMi5N6VT3/uscoGH7+zJrv4AuuPg==";
 
         public static async Task<string> GenerateAccessToken(int userId)
