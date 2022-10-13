@@ -91,7 +91,6 @@ namespace BookRecords.Services
                         Success = false,
                         Error = "Author Not found",
                         ErrorCode = "A02",
-
                     };
                 }
                 else
@@ -108,7 +107,7 @@ namespace BookRecords.Services
             };
         }
 
-        public async Task<AuthorResponse> DeleteAuthorkAsync(int id)
+        public async Task<AuthorResponse> DeleteAuthorAsync(int id)
         {
             var author = await _context.Authors.FindAsync(id);
             if (author == null)
@@ -122,24 +121,60 @@ namespace BookRecords.Services
             }
 
             _context.Authors.Remove(author);
-            await _context.SaveChangesAsync();
+            var deleteResponse = await _context.SaveChangesAsync();
+            if (deleteResponse >= 0)
+            {
+                return new AuthorResponse
+                {
+                    Success = true,
+                    Idauthor = author.Idauthor
+                };
+            }
 
             return new AuthorResponse
             {
-                Success = true,
-                Idauthor = author.Idauthor,
+                Success = false,
+                Error = "Unable to delete author",
+                ErrorCode = "A03"
                 
             };
+        }
+        public async Task<AuthorResponse> CreateAuthorAsync(Author author)
+        {
+            await _context.Authors.AddAsync(author);
+
+            var createResponse = await _context.SaveChangesAsync();
+
+            if (createResponse >= 0)
+            {
+                return new AuthorResponse {
+                    Success = true,
+                    Idauthor=author.Idauthor,
+                    Firstname=author.Firstname,
+                    Lastname=author.Lastname,
+                };
+            }
+            return new AuthorResponse
+            {
+                Success = false,
+                Error = "Unable to save author",
+                ErrorCode = "A05"
+            };
+
         }
 
         private bool AuthorExists(int id)
         {
             return _context.Authors.Any(e => e.Idauthor == id);
         }
+
+
+       
     }
 }
 //ERROR CODES USED:
 //A02: Author not found
 //A01:
-//A03
+//A03: Unable to Delete author
 //A04: No Authors Found
+//A05 : Unable to save author

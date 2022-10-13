@@ -7,39 +7,60 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookRecords.Data;
 using BookRecords.Data.Entities;
+using BookRecords.Interfaces;
+using BookRecords.Responses.Authors;
 
 namespace BookRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class AuthorsController : BaseApiController
     {
         private readonly bookrecordsContext _context;
+        private readonly IAuthorService _authorService;
 
-        public AuthorsController(bookrecordsContext context)
+        public AuthorsController(bookrecordsContext context, IAuthorService authorService)
         {
             _context = context;
+            _authorService = authorService;
         }
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        public async Task<IActionResult> GetAuthors()
         {
-            return await _context.Authors.ToListAsync();
+            var getAuthorsResponse = await _authorService.GetAuthorsAsync();
+            if (!getAuthorsResponse.Success)
+            {
+                return UnprocessableEntity(getAuthorsResponse);
+            }
+            var authorsResponse = getAuthorsResponse.Authors.ConvertAll(o => new AuthorResponse {
+                Idauthor = o.Idauthor,
+                Firstname = o.Firstname, 
+                Lastname = o.Lastname
+            }); ;
+
+            return Ok(authorsResponse);
         }
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Author>> GetAuthor(int id)
+        public async Task<IActionResult> GetAuthor(int id)
         {
-            var author = await _context.Authors.FindAsync(id);
+            var author = await _authorService.GetAuthorByIdAsync(id);
 
-            if (author == null)
+            if (!author.Success)
             {
-                return NotFound();
+                return UnprocessableEntity(author);
             }
 
-            return author;
+            return Ok(new AuthorResponse
+            {
+                Idauthor = author.Idauthor,
+                Firstname=author.Firstname,
+                Lastname=author.Lastname
+            });
+
         }
 
         // PUT: api/Authors/5
@@ -52,22 +73,11 @@ namespace BookRecords.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(author).State = EntityState.Modified;
+            var authorResponse = await _authorService.UpdateAuthorAsync(id, author);
 
-            try
+            if (!authorResponse.Success)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuthorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(author);
             }
 
             return NoContent();
@@ -78,8 +88,12 @@ namespace BookRecords.Controllers
         [HttpPost]
         public async Task<ActionResult<Author>> PostAuthor(Author author)
         {
-            _context.Authors.Add(author);
-            await _context.SaveChangesAsync();
+            var authorResponse = await _authorService.CreateAuthorAsync(author);
+
+            if (!authorResponse.Success)
+            {
+                return UnprocessableEntity(author);
+            }
 
             return CreatedAtAction("GetAuthor", new { id = author.Idauthor }, author);
         }
@@ -88,21 +102,15 @@ namespace BookRecords.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            var author = await _context.Authors.FindAsync(id);
-            if (author == null)
-            {
-                return NotFound();
-            }
 
-            _context.Authors.Remove(author);
-            await _context.SaveChangesAsync();
+            var authorResponse = await _authorService.DeleteAuthorAsync(id);
+            if (!authorResponse.Success)
+            {
+                return BadRequest();
+            }
 
             return NoContent();
         }
 
-        private bool AuthorExists(int id)
-        {
-            return _context.Authors.Any(e => e.Idauthor == id);
-        }
     }
 }

@@ -7,7 +7,8 @@ namespace BookRecords.Interfaces
     {
         Task<GetAuthorsResponse> GetAuthorsAsync();
         Task<AuthorResponse> GetAuthorByIdAsync(int id);
+        Task<AuthorResponse> CreateAuthorAsync(Author author);
         Task<AuthorResponse> UpdateAuthorAsync(int id, Author author);
-        Task<AuthorResponse> DeleteAuthorkAsync(int id);
+        Task<AuthorResponse> DeleteAuthorAsync(int id);
     }
 }
