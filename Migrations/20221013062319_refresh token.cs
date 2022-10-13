@@ -17,14 +17,14 @@ namespace BookRecords.Migrations
                 name: "author",
                 columns: table => new
                 {
-                    idauthor = table.Column<int>(type: "int", nullable: false)
+                    Idauthor = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    firstname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
-                    lastname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci")
+                    Firstname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
+                    Lastname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => x.idauthor);
+                    table.PrimaryKey("PRIMARY", x => x.Idauthor);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -32,16 +32,16 @@ namespace BookRecords.Migrations
                 name: "book",
                 columns: table => new
                 {
-                    idbook = table.Column<int>(type: "int", nullable: false)
+                    Idbook = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    book_name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
-                    release_year = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    type = table.Column<string>(type: "enum('Hardcover','Paperback','Digital','Comicbook')", nullable: true, collation: "utf8_general_ci"),
-                    isbn = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true, collation: "utf8_general_ci")
+                    BookName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
+                    ReleaseYear = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Type = table.Column<string>(type: "enum('Hardcover','Paperback','Digital','Comicbook')", nullable: true, collation: "utf8_general_ci"),
+                    Isbn = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true, collation: "utf8_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => x.idbook);
+                    table.PrimaryKey("PRIMARY", x => x.Idbook);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -49,12 +49,12 @@ namespace BookRecords.Migrations
                 name: "category",
                 columns: table => new
                 {
-                    idcategory = table.Column<int>(type: "int", nullable: false),
-                    category_name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci")
+                    Idcategory = table.Column<int>(type: "int", nullable: false),
+                    CategoryName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => x.idcategory);
+                    table.PrimaryKey("PRIMARY", x => x.Idcategory);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -62,19 +62,19 @@ namespace BookRecords.Migrations
                 name: "user",
                 columns: table => new
                 {
-                    iduser = table.Column<int>(type: "int", nullable: false)
+                    Iduser = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    username = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false, collation: "utf8_general_ci"),
-                    password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
-                    email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
-                    firstname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
-                    lastname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
-                    created_at = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    updated_at = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "CURRENT_TIMESTAMP")
+                    Username = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false, collation: "utf8_general_ci"),
+                    Password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8_general_ci"),
+                    Email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
+                    Firstname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
+                    Lastname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => x.iduser);
+                    table.PrimaryKey("PRIMARY", x => x.Iduser);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -82,23 +82,27 @@ namespace BookRecords.Migrations
                 name: "author_books",
                 columns: table => new
                 {
-                    idauthor = table.Column<int>(type: "int", nullable: false),
-                    idbook = table.Column<int>(type: "int", nullable: false)
+                    Idauthor = table.Column<int>(type: "int", nullable: false),
+                    Idbook = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.idauthor, x.idbook })
+                    table.PrimaryKey("PRIMARY", x => new { x.Idauthor, x.Idbook })
                         .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
                     table.ForeignKey(
                         name: "fk_author_authorbooks",
-                        column: x => x.idauthor,
+                        column: x => x.Idauthor,
                         principalTable: "author",
-                        principalColumn: "idauthor");
+                        principalColumn: "Idauthor",
+                        onUpdate:ReferentialAction.Cascade,
+                        onDelete:ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_book_authorbooks",
-                        column: x => x.idbook,
+                        column: x => x.Idbook,
                         principalTable: "book",
-                        principalColumn: "idbook");
+                        principalColumn: "Idbook",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -106,23 +110,27 @@ namespace BookRecords.Migrations
                 name: "book_categories",
                 columns: table => new
                 {
-                    idbook = table.Column<int>(type: "int", nullable: false),
-                    idcategory = table.Column<int>(type: "int", nullable: false)
+                    Idbook = table.Column<int>(type: "int", nullable: false),
+                    Idcategory = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.idbook, x.idcategory })
+                    table.PrimaryKey("PRIMARY", x => new { x.Idbook, x.Idcategory })
                         .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
                     table.ForeignKey(
                         name: "fk_book_bookcategories",
-                        column: x => x.idbook,
+                        column: x => x.Idbook,
                         principalTable: "book",
-                        principalColumn: "idbook");
+                        principalColumn: "Idbook",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_category_bookcategories",
-                        column: x => x.idcategory,
+                        column: x => x.Idcategory,
                         principalTable: "category",
-                        principalColumn: "idcategory");
+                        principalColumn: "Idcategory",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -145,7 +153,7 @@ namespace BookRecords.Migrations
                         name: "FK_RefreshToken_User",
                         column: x => x.Iduser,
                         principalTable: "user",
-                        principalColumn: "iduser");
+                        principalColumn: "Iduser");
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
@@ -153,45 +161,49 @@ namespace BookRecords.Migrations
                 name: "user_books",
                 columns: table => new
                 {
-                    iduser = table.Column<int>(type: "int", nullable: false),
-                    idbook = table.Column<int>(type: "int", nullable: false)
+                    Iduser = table.Column<int>(type: "int", nullable: false),
+                    Idbook = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.iduser, x.idbook })
+                    table.PrimaryKey("PRIMARY", x => new { x.Iduser, x.Idbook })
                         .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
                     table.ForeignKey(
                         name: "fk_book_userbooks",
-                        column: x => x.idbook,
+                        column: x => x.Idbook,
                         principalTable: "book",
-                        principalColumn: "idbook");
+                        principalColumn: "Idbook",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_user_userbooks",
-                        column: x => x.iduser,
+                        column: x => x.Iduser,
                         principalTable: "user",
-                        principalColumn: "iduser");
+                        principalColumn: "Iduser",
+                        onUpdate: ReferentialAction.Cascade,
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateIndex(
                 name: "fk_author_authorbooks_idx",
                 table: "author_books",
-                column: "idauthor");
+                column: "Idauthor");
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_authorbooks_idx",
                 table: "author_books",
-                column: "idbook");
+                column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_bookcategories_idx",
                 table: "book_categories",
-                column: "idbook");
+                column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_category_bookcategories_idx",
                 table: "book_categories",
-                column: "idcategory");
+                column: "Idcategory");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_Iduser",
@@ -201,18 +213,18 @@ namespace BookRecords.Migrations
             migrationBuilder.CreateIndex(
                 name: "username_UNIQUE",
                 table: "user",
-                column: "username",
+                column: "Username",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_userbooks_idx",
                 table: "user_books",
-                column: "idbook");
+                column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_user_userbooks_idx",
                 table: "user_books",
-                column: "iduser");
+                column: "Iduser");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
