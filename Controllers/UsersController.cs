@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BookRecords.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookRecords.Data.Entities;
+using BookRecords.Interfaces;
+using BookRecords.Responses.Users;
+using BookRecords.Services;
 
 namespace BookRecords.Controllers
 {
@@ -15,61 +11,73 @@ namespace BookRecords.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly bookrecordsContext _context;
-
-        public UsersController(bookrecordsContext context)
+        
+        
+        private readonly IUserService _userService;
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var getUsersResponse = await _userService.GetUsersAsync();
+
+            if (!getUsersResponse.Success)
+            {
+                return BadRequest();
+            }
+            var userResponse = getUsersResponse.Users.ConvertAll(o => new UserResponse
+            {
+                Iduser = o.Iduser,
+                Username = o.Username,
+                Firstname = o.Firstname,
+                Lastname = o.Lastname,
+                Email = o.Email,
+            });
+
+            return Ok(userResponse);
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);             
+            var user = await _userService.GetUserByIdAsync(id);             
             if (user == null)
             {
                 return NotFound();
             }
+            var userResponse = new UserDetailResponse {
+                Iduser = user.Iduser,
+                Username=user.Username,
+                Email = user.Email,
+                Firstname=user.Firstname,
+                Lastname=user.Lastname,
+                CreatedAt=user.CreatedAt,
+                Books = user.Books,
+            };
 
-            return user;
+            return Ok(userResponse);
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<ActionResult> PutUser(int id, User user)
         {
-            //check if id in url is same as iduser in user object
             if (id != user.Iduser)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            var userUpdateResponse = await _userService.UpdateUserAsync(id, user);
 
-            try
+            if (!userUpdateResponse.Success)
             {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(user);
             }
 
             return NoContent();
@@ -78,54 +86,31 @@ namespace BookRecords.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult> PostUser(User user)
         {
-            //If user exist (check if username exist), return badrequest
-            if (UsernameExists(user.Username))
+            var userResponse = await _userService.CreateUserAsync(user);
+
+            if (!userResponse.Success)
             {
-                return Content("Username already exists");
+                return UnprocessableEntity(user);
             }
-            else
-            {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetUser), new { id = user.Iduser }, user);
-            }
+
+            return CreatedAtAction(nameof(GetUser), new { id = user.Iduser }, user);
+            
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var userResponse = await _userService.DeleteUserAsync(id);
+            if (!userResponse.Success)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            try
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                return NoContent();
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-                
-            }
+            return NoContent();
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Iduser == id);
-        }
-        //
-        private bool UsernameExists(string username)
-        {
-            return _context.Users.Any(e => e.Username == username);
-        }
     }
 }

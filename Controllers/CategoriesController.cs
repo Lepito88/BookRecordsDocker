@@ -18,7 +18,7 @@ namespace BookRecords.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly bookrecordsContext _context;
+
         private readonly ICategoryService _categoryService;
 
         public CategoriesController(ICategoryService categoryService)
@@ -115,17 +115,6 @@ namespace BookRecords.Controllers
             return NoContent();
         }
 
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Idcategory == id);
-        }
-        private bool CategoryNameExists(int id, string name)
-        {
-            return _context.Categories.Any(e => e.CategoryName == name && e.Idcategory == id);
-        }
-        private bool CategoryExistsByName(string name)
-        {
-            return _context.Categories.Any(e => e.CategoryName == name);
-        }
+      
     }
 }

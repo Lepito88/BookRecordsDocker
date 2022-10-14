@@ -19,8 +19,8 @@ namespace BookRecords.Data.Entities
         public string? Email { get; set; }
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = default!;
+        public DateTime? UpdatedAt { get; set; } = default!;
 
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<Book> Books { get; set; }
