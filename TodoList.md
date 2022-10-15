@@ -16,13 +16,12 @@ Tasks to do:
 - Get book's categories (Categories that book belongs to) [DONE], GetBookById shows book's authors, categories
 - Simple username & password login [DONE]
 
-
+- Login method => e.g. Ask username & password => Validate them and check if they exists => create JWT token => return it. [DONE]
+- Logout method => revoke JWT token or delete from local storage etc. [DONE]
 - Think about ENDPOINT URLs for Adding/removing author,category,book etc
-- Login method => e.g. Ask username & password => Validate them and check if they exists => create JWT token => return it.
-- Logout method => revoke JWT token or delete from local storage etc.
 
 ## Medium => if there is time
-- JWT token creation & validation (Belongs to login & logout)
+- JWT token creation & validation (Belongs to login & logout) [DONE]
 - Input validation
 - Null value validation & Handling & checking. => DATABASE null value handling
 - Database securing?? => e.g. environment variables, connection strings etc.
@@ -38,4 +37,4 @@ Tasks to do:
 ## Basic stuff need to be done
  - Update README
  - Create Frontend
- -
+ - DATETIME formats & formatting
