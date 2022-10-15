@@ -38,3 +38,5 @@ Tasks to do:
  - Update README
  - Create Frontend
  - DATETIME formats & formatting
+ - ADD [Authorize] to Controllers => this adds Authorize middleware to controllers
+ - Check how to store SENSITIVE information => Connection strings, Jwt secrets etc.
