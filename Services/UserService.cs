@@ -84,7 +84,13 @@ namespace BookRecords.Services
 
         public async Task<UserDetailResponse> GetUserByIdAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Where(u => u.Iduser == id)
+                .Include(_ => _.Books)
+                .ThenInclude(_ => _.Authors)
+                .ThenInclude(_=> _.Books)
+                .ThenInclude(_ => _.Categories)
+                .FirstOrDefaultAsync();
             if (user is null)
             {
                 return new UserDetailResponse

@@ -47,6 +47,8 @@ builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEntityRelationShipManagerService, EntityRelationShipManagerService>();
+
 
 
 //DATABASE CONNECTIONS

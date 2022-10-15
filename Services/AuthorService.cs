@@ -1,7 +1,9 @@
 ﻿using BookRecords.Data;
 using BookRecords.Data.Entities;
 using BookRecords.Interfaces;
+using BookRecords.Responses;
 using BookRecords.Responses.Authors;
+using BookRecords.Responses.Books;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookRecords.Services
@@ -34,7 +36,11 @@ namespace BookRecords.Services
 
         public async Task<AuthorResponse> GetAuthorByIdAsync(int id)
         {
-            var author = await _context.Authors.FindAsync(id);
+            var author = await _context.Authors
+                .Where(author => author.Idauthor == id)
+                .Include(_=> _.Books)
+                .ThenInclude(_ => _.Categories)
+                .FirstOrDefaultAsync();
             if (author is null)
             {
                 return new AuthorResponse { 
@@ -44,12 +50,29 @@ namespace BookRecords.Services
                 };
             }
 
+            var abooks = author.Books.ToList();
+            var tmpList = new List<BooksResponseForAuthor>();
+            foreach (var book in abooks)
+            {
+                tmpList.Add(new BooksResponseForAuthor
+                {
+                    BookId = book.Idbook,
+                    BookName = book.BookName,
+                    Type = book.Type,
+                    Isbn = book.Isbn,
+                    ReleaseYear = (DateTime)book.ReleaseYear,
+                    Categories = book.Categories,
+                });
+
+            }
+
             return new AuthorResponse 
             { 
                 Success = true, 
                 Idauthor=author.Idauthor, 
                 Firstname = author.Firstname, 
-                Lastname = author.Lastname 
+                Lastname = author.Lastname,
+                Books = tmpList
             };
         }
 

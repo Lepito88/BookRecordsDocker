@@ -57,7 +57,8 @@ namespace BookRecords.Controllers
             {
                 Idauthor = author.Idauthor,
                 Firstname=author.Firstname,
-                Lastname=author.Lastname
+                Lastname=author.Lastname,
+                Books = author.Books
             });
 
         }

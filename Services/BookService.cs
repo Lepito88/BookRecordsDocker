@@ -34,7 +34,11 @@ namespace BookRecords.Services
         }
         public async Task<BookResponse> GetBookByIdAsync(int id)
         {
-            var bookResponse = await _context.Books.FindAsync(id);
+            var bookResponse = await _context.Books
+                .Where(book => book.Idbook == id)
+                .Include(_ => _.Authors)
+                .Include(_ => _.Categories)
+                .FirstOrDefaultAsync();
             if (bookResponse is null)
             {
                 return new BookResponse 
@@ -45,13 +49,16 @@ namespace BookRecords.Services
                 };
             }
 
+
             return new BookResponse {
                 Success = true,
                 Idbook = bookResponse.Idbook,
                 BookName = bookResponse.BookName,
                 Type = bookResponse.Type,
                 Isbn = bookResponse.Isbn,
-                ReleaseYear = (DateTime)bookResponse.ReleaseYear
+                ReleaseYear = (DateTime)bookResponse.ReleaseYear,
+                Authors = bookResponse.Authors,
+                Categories = bookResponse.Categories
             };
 
         }
