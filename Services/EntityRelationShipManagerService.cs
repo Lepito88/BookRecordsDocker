@@ -47,8 +47,8 @@ namespace BookRecords.Services
                 };
             }
 
-            var isAuthorAddedToBook = book.Authors.Where(_ => _.Idauthor == authorid);
-            if (isAuthorAddedToBook.Count() >0)
+            var isAuthorAddedToBook = book.Authors.SingleOrDefault(_ => _.Idauthor == authorid);
+            if (isAuthorAddedToBook != null)
             {
                 return new AuthorToBookResponse
                 {
@@ -124,9 +124,9 @@ namespace BookRecords.Services
                 };
             }
             //TODO: ADD check if the user already has the book
-            var isBookOwned = user.Books.Where(_ => _.Idbook == bookid);
+            var isBookOwned = user.Books.SingleOrDefault(_ => _.Idbook == bookid);
 
-            if (isBookOwned.Count() > 0 || isBookOwned != null)
+            if (isBookOwned != null)
             {
                 return new BookToUserResponse
                 {
@@ -200,9 +200,9 @@ namespace BookRecords.Services
                     ErrorCode = "ATB10"
                 };
             }
-            var isCategoryAdded = book.Categories.Where(_ => _.Idcategory == categoryid);
+            var isCategoryAdded = book.Categories.SingleOrDefault(_ => _.Idcategory == categoryid);
 
-            if (isCategoryAdded.Count() > 0)
+            if (isCategoryAdded != null)
             {
                 return new CategoryToBookResponse
                 {
@@ -278,8 +278,8 @@ namespace BookRecords.Services
                 };
             }
             //check if book has author
-            var bookHasAuthor = book.Authors.Where(_ => _.Idauthor == authorid);
-            if (bookHasAuthor.Count() <= 0)
+            var bookHasAuthor = book.Authors.SingleOrDefault(_ => _.Idauthor == authorid);
+            if (bookHasAuthor == null)
             {
                 return new AuthorToBookResponse
                 {
@@ -355,9 +355,9 @@ namespace BookRecords.Services
                 };
             }
 
-            var isBookAddedToUser = user.Books.Where(_ => _.Idbook == bookid);
+            var isBookAddedToUser = user.Books.SingleOrDefault(_ => _.Idbook == bookid);
 
-            if (isBookAddedToUser.Count() <= 0)
+            if (isBookAddedToUser == null)
             { 
                 return new BookToUserResponse
                 {
@@ -432,9 +432,9 @@ namespace BookRecords.Services
                     ErrorCode = "ATB10"
                 };
             }
-            var isCategoryAdded = book.Categories.Where(_ => _.Idcategory == categoryid);
+            var isCategoryAdded = book.Categories.SingleOrDefault(_ => _.Idcategory == categoryid);
 
-            if (isCategoryAdded.Count() <= 0)
+            if (isCategoryAdded == null)
             {
                 return new CategoryToBookResponse
                 {
