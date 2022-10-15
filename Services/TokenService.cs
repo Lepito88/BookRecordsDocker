@@ -18,17 +18,18 @@ namespace BookRecords.Services
             _context = context;
         }
 
-        public async Task<Tuple<string, string>> GenerateTokensAsync(int Iduser)
+        public async Task<Tuple<string, string>> GenerateTokensAsync(User user)
         {
-            var accessToken = await TokenHelper.GenerateAccessToken(Iduser);
-            var refreshToken = await TokenHelper.GenerateRefreshToken();
-
-            var userRecord = await _context.Users.Include(o => o.RefreshTokens).FirstOrDefaultAsync(e => e.Iduser == Iduser);
-
+            var userRecord = await _context.Users.Include(o => o.RefreshTokens).FirstOrDefaultAsync(e => e.Iduser == user.Iduser);
+            
             if (userRecord == null)
             {
                 return null;
             }
+
+            var accessToken = await TokenHelper.GenerateAccessToken(userRecord);
+            var refreshToken = await TokenHelper.GenerateRefreshToken();
+
 
             var salt = HashHelper.GetSecureSalt();
 
@@ -43,7 +44,7 @@ namespace BookRecords.Services
             {
                 ExpiryDate = DateTime.Now.AddDays(30),
                 Timestamp = DateTime.Now,
-                Iduser = Iduser,
+                Iduser = user.Iduser,
                 TokenHash = refreshTokenHashed,
                 TokenSalt = Convert.ToBase64String(salt)
 
