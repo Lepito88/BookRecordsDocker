@@ -18,7 +18,7 @@ Tasks to do:
 
 - Login method (JWT Accesstoken + Refreshtoken) [DONE]
 - Logout method => revoke JWT token [DONE]
-- Moved Sensitive information to User secrets file that is stored elsewhere. (Secrets.json)
+- Moved Sensitive information to User secrets file that is stored elsewhere. (Secrets.json) [DONE]
 
 ## Medium => if there is time
 - JWT token creation & validation (Belongs to login & logout) [DONE]
@@ -37,5 +37,5 @@ Tasks to do:
  - Update README
  - Create Frontend
  - DATETIME formats & formatting
- - ADD [Authorize] to Controllers => this adds Authorize middleware to controllers
- - Check how to store SENSITIVE information => Connection strings, Jwt secrets etc.
+ - ADD [Authorize] to Controllers => this adds Authorize middleware to controllers [DONE]
+ - Check how to store SENSITIVE information => Connection strings, Jwt secrets etc. [DONE]

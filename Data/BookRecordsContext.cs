@@ -63,7 +63,7 @@ namespace BookRecords.Data
                 entity.HasKey(e => e.Idauthor)
                     .HasName("PRIMARY");
 
-                entity.ToTable("author");
+                entity.ToTable("Author");
 
                 entity.Property(e => e.Idauthor).HasColumnName("Idauthor");
 
@@ -79,13 +79,13 @@ namespace BookRecords.Data
                     .WithMany(p => p.Authors)
                     .UsingEntity<Dictionary<string, object>>(
                         "AuthorBook",
-                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_authorbooks"),
-                        r => r.HasOne<Author>().WithMany().HasForeignKey("Idauthor").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_author_authorbooks"),
+                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_book_authorbooks"),
+                        r => r.HasOne<Author>().WithMany().HasForeignKey("Idauthor").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_author_authorbooks"),
                         j =>
                         {
                             j.HasKey("Idauthor", "Idbook").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                            j.ToTable("author_books");
+                            j.ToTable("AuthorBooks");
 
                             j.HasIndex(new[] { "Idauthor" }, "fk_author_authorbooks_idx");
 
@@ -102,7 +102,7 @@ namespace BookRecords.Data
                 entity.HasKey(e => e.Idbook)
                     .HasName("PRIMARY");
 
-                entity.ToTable("book");
+                entity.ToTable("Book");
 
                 entity.Property(e => e.Idbook).HasColumnName("Idbook");
 
@@ -124,13 +124,13 @@ namespace BookRecords.Data
                     .WithMany(p => p.Books)
                     .UsingEntity<Dictionary<string, object>>(
                         "BookCategory",
-                        l => l.HasOne<Category>().WithMany().HasForeignKey("Idcategory").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_category_bookcategories"),
-                        r => r.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_bookcategories"),
+                        l => l.HasOne<Category>().WithMany().HasForeignKey("Idcategory").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_category_bookcategories"),
+                        r => r.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_book_bookcategories"),
                         j =>
                         {
                             j.HasKey("Idbook", "Idcategory").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                            j.ToTable("book_categories");
+                            j.ToTable("BookCategories");
 
                             j.HasIndex(new[] { "Idbook" }, "fk_book_bookcategories_idx");
 
@@ -147,7 +147,7 @@ namespace BookRecords.Data
                 entity.HasKey(e => e.Idcategory)
                     .HasName("PRIMARY");
 
-                entity.ToTable("category");
+                entity.ToTable("Category");
 
                 entity.Property(e => e.Idcategory)
                     .ValueGeneratedNever()
@@ -163,7 +163,7 @@ namespace BookRecords.Data
                 entity.HasKey(e => e.Iduser)
                     .HasName("PRIMARY");
 
-                entity.ToTable("user");
+                entity.ToTable("User");
 
                 entity.HasIndex(e => e.Username, "Username_UNIQUE")
                     .IsUnique();
@@ -204,13 +204,13 @@ namespace BookRecords.Data
                     .WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
                         "UserBook",
-                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_book_userbooks"),
-                        r => r.HasOne<User>().WithMany().HasForeignKey("Iduser").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("fk_user_userbooks"),
+                        l => l.HasOne<Book>().WithMany().HasForeignKey("Idbook").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_book_userbooks"),
+                        r => r.HasOne<User>().WithMany().HasForeignKey("Iduser").OnDelete(DeleteBehavior.Restrict).HasConstraintName("fk_user_userbooks"),
                         j =>
                         {
                             j.HasKey("Iduser", "Idbook").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-                            j.ToTable("user_books");
+                            j.ToTable("UserBooks");
 
                             j.HasIndex(new[] { "Idbook" }, "fk_book_userbooks_idx");
 

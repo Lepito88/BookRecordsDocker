@@ -40,7 +40,7 @@ namespace BookRecords.Migrations
 
                     b.HasIndex(new[] { "Idbook" }, "fk_book_authorbooks_idx");
 
-                    b.ToTable("author_books", (string)null);
+                    b.ToTable("AuthorBooks", (string)null);
                 });
 
             modelBuilder.Entity("BookCategory", b =>
@@ -61,7 +61,7 @@ namespace BookRecords.Migrations
 
                     b.HasIndex(new[] { "Idcategory" }, "fk_category_bookcategories_idx");
 
-                    b.ToTable("book_categories", (string)null);
+                    b.ToTable("BookCategories", (string)null);
                 });
 
             modelBuilder.Entity("BookRecords.Data.Entities.Author", b =>
@@ -86,7 +86,7 @@ namespace BookRecords.Migrations
                     b.HasKey("Idauthor")
                         .HasName("PRIMARY");
 
-                    b.ToTable("author", (string)null);
+                    b.ToTable("Author", (string)null);
                 });
 
             modelBuilder.Entity("BookRecords.Data.Entities.Book", b =>
@@ -118,7 +118,7 @@ namespace BookRecords.Migrations
                     b.HasKey("Idbook")
                         .HasName("PRIMARY");
 
-                    b.ToTable("book", (string)null);
+                    b.ToTable("Book", (string)null);
                 });
 
             modelBuilder.Entity("BookRecords.Data.Entities.Category", b =>
@@ -136,7 +136,7 @@ namespace BookRecords.Migrations
                     b.HasKey("Idcategory")
                         .HasName("PRIMARY");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("BookRecords.Data.Entities.RefreshToken", b =>
@@ -225,7 +225,7 @@ namespace BookRecords.Migrations
                     b.HasIndex(new[] { "Username" }, "Username_UNIQUE")
                         .IsUnique();
 
-                    b.ToTable("user", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("UserBook", b =>
@@ -246,7 +246,7 @@ namespace BookRecords.Migrations
 
                     b.HasIndex(new[] { "Iduser" }, "fk_user_userbooks_idx");
 
-                    b.ToTable("user_books", (string)null);
+                    b.ToTable("UserBooks", (string)null);
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -254,12 +254,14 @@ namespace BookRecords.Migrations
                     b.HasOne("BookRecords.Data.Entities.Author", null)
                         .WithMany()
                         .HasForeignKey("Idauthor")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_author_authorbooks");
 
                     b.HasOne("BookRecords.Data.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("Idbook")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_book_authorbooks");
                 });
@@ -269,12 +271,14 @@ namespace BookRecords.Migrations
                     b.HasOne("BookRecords.Data.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("Idbook")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_book_bookcategories");
 
                     b.HasOne("BookRecords.Data.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("Idcategory")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_category_bookcategories");
                 });
@@ -295,12 +299,14 @@ namespace BookRecords.Migrations
                     b.HasOne("BookRecords.Data.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("Idbook")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_book_userbooks");
 
                     b.HasOne("BookRecords.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("Iduser")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_user_userbooks");
                 });

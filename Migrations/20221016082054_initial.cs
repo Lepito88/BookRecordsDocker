@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookRecords.Migrations
 {
-    public partial class refreshtoken : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace BookRecords.Migrations
                 .Annotation("MySql:CharSet", "utf8mb3");
 
             migrationBuilder.CreateTable(
-                name: "author",
+                name: "Author",
                 columns: table => new
                 {
                     Idauthor = table.Column<int>(type: "int", nullable: false)
@@ -29,7 +29,7 @@ namespace BookRecords.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "book",
+                name: "Book",
                 columns: table => new
                 {
                     Idbook = table.Column<int>(type: "int", nullable: false)
@@ -46,7 +46,7 @@ namespace BookRecords.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "category",
+                name: "Category",
                 columns: table => new
                 {
                     Idcategory = table.Column<int>(type: "int", nullable: false),
@@ -59,7 +59,7 @@ namespace BookRecords.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "user",
+                name: "User",
                 columns: table => new
                 {
                     Iduser = table.Column<int>(type: "int", nullable: false)
@@ -79,7 +79,7 @@ namespace BookRecords.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "author_books",
+                name: "AuthorBooks",
                 columns: table => new
                 {
                     Idauthor = table.Column<int>(type: "int", nullable: false),
@@ -92,22 +92,20 @@ namespace BookRecords.Migrations
                     table.ForeignKey(
                         name: "fk_author_authorbooks",
                         column: x => x.Idauthor,
-                        principalTable: "author",
+                        principalTable: "Author",
                         principalColumn: "Idauthor",
-                        onUpdate:ReferentialAction.Cascade,
-                        onDelete:ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_book_authorbooks",
                         column: x => x.Idbook,
-                        principalTable: "book",
+                        principalTable: "Book",
                         principalColumn: "Idbook",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "book_categories",
+                name: "BookCategories",
                 columns: table => new
                 {
                     Idbook = table.Column<int>(type: "int", nullable: false),
@@ -120,16 +118,14 @@ namespace BookRecords.Migrations
                     table.ForeignKey(
                         name: "fk_book_bookcategories",
                         column: x => x.Idbook,
-                        principalTable: "book",
+                        principalTable: "Book",
                         principalColumn: "Idbook",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_category_bookcategories",
                         column: x => x.Idcategory,
-                        principalTable: "category",
+                        principalTable: "Category",
                         principalColumn: "Idcategory",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -143,7 +139,7 @@ namespace BookRecords.Migrations
                     Iduser = table.Column<int>(type: "int", nullable: false),
                     TokenHash = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false, collation: "utf8_general_ci"),
                     TokenSalt = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false, collation: "utf8_general_ci"),
-                    Timestamp = table.Column<DateTime>(type: "datetime", nullable: false),
+                    timestamp = table.Column<DateTime>(type: "datetime", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
@@ -152,13 +148,13 @@ namespace BookRecords.Migrations
                     table.ForeignKey(
                         name: "FK_RefreshToken_User",
                         column: x => x.Iduser,
-                        principalTable: "user",
+                        principalTable: "User",
                         principalColumn: "Iduser");
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "user_books",
+                name: "UserBooks",
                 columns: table => new
                 {
                     Iduser = table.Column<int>(type: "int", nullable: false),
@@ -171,38 +167,36 @@ namespace BookRecords.Migrations
                     table.ForeignKey(
                         name: "fk_book_userbooks",
                         column: x => x.Idbook,
-                        principalTable: "book",
+                        principalTable: "Book",
                         principalColumn: "Idbook",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_user_userbooks",
                         column: x => x.Iduser,
-                        principalTable: "user",
+                        principalTable: "User",
                         principalColumn: "Iduser",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateIndex(
                 name: "fk_author_authorbooks_idx",
-                table: "author_books",
+                table: "AuthorBooks",
                 column: "Idauthor");
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_authorbooks_idx",
-                table: "author_books",
+                table: "AuthorBooks",
                 column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_bookcategories_idx",
-                table: "book_categories",
+                table: "BookCategories",
                 column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_category_bookcategories_idx",
-                table: "book_categories",
+                table: "BookCategories",
                 column: "Idcategory");
 
             migrationBuilder.CreateIndex(
@@ -211,47 +205,47 @@ namespace BookRecords.Migrations
                 column: "Iduser");
 
             migrationBuilder.CreateIndex(
-                name: "username_UNIQUE",
-                table: "user",
+                name: "Username_UNIQUE",
+                table: "User",
                 column: "Username",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "fk_book_userbooks_idx",
-                table: "user_books",
+                table: "UserBooks",
                 column: "Idbook");
 
             migrationBuilder.CreateIndex(
                 name: "fk_user_userbooks_idx",
-                table: "user_books",
+                table: "UserBooks",
                 column: "Iduser");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "author_books");
+                name: "AuthorBooks");
 
             migrationBuilder.DropTable(
-                name: "book_categories");
+                name: "BookCategories");
 
             migrationBuilder.DropTable(
                 name: "RefreshToken");
 
             migrationBuilder.DropTable(
-                name: "user_books");
+                name: "UserBooks");
 
             migrationBuilder.DropTable(
-                name: "author");
+                name: "Author");
 
             migrationBuilder.DropTable(
-                name: "category");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "book");
+                name: "Book");
 
             migrationBuilder.DropTable(
-                name: "user");
+                name: "User");
         }
     }
 }

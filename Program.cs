@@ -63,7 +63,8 @@ builder.Services.AddTransient<IEntityRelationShipManagerService, EntityRelationS
 
 builder.Services.AddDbContext<bookrecordsContext>(
     DbContextOptions => DbContextOptions
-        .UseMySql(builder.Configuration["AppSettings:MySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:MySqlConnection"]))
+        //.UseMySql(builder.Configuration["AppSettings:MySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:MySqlConnection"]))
+        .UseMySql(builder.Configuration["AppSettings:QnapMySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:QnapMySqlConnection"]))
         //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         //.UseSqlServer(connectionString)
         // The following three options help with debugging, but should
