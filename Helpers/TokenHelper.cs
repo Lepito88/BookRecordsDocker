@@ -1,4 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using BookRecords.Data.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -7,18 +10,30 @@ namespace BookRecords.Helpers
 {
     public class TokenHelper
     {
-        //TODO: MOVE THESE TO SECRETS FILE
-        public const string Issuer = "localhost";
-        public const string Audience = "localhost";
-        public const string Secret = "p0GXO6VuVZLRPef0tyO9jCqK4uZufDa6LP4n8Gj+8hQPB30f94pFiECAnPeMi5N6VT3/uscoGH7+zJrv4AuuPg==";
+        
+        private readonly IConfiguration _configuration;
 
-        public static async Task<string> GenerateAccessToken(int userId)
+        public TokenHelper(IConfiguration config) {
+            _configuration = config;
+        }
+
+        public string JwtIssuer { get; private set; }
+        public string JwtAudience { get; private set; }
+        public string JwtSecret { get; private set; }
+        
+        public async Task<string> GenerateAccessToken(User user)
         {
+
+            JwtIssuer = _configuration["AppSettings:JWT_Issuer"];
+            JwtAudience = _configuration["AppSettings:JWT_Audience"];
+            JwtSecret = _configuration["AppSettings:JWT_Secret"];
+          
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Convert.FromBase64String(Secret);
+            var key = Convert.FromBase64String(JwtSecret);
 
             var claimsIdentity = new ClaimsIdentity(new[] {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Iduser.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
             });
 
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
@@ -26,8 +41,8 @@ namespace BookRecords.Helpers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,
-                Issuer = Issuer,
-                Audience = Audience,
+                Issuer = JwtIssuer,
+                Audience = JwtAudience,
                 Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = signingCredentials,
 

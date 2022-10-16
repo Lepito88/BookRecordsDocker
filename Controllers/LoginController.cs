@@ -49,6 +49,7 @@ namespace BookRecords.Controllers
             return Ok(loginResponse);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("refresh_token")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
@@ -68,8 +69,12 @@ namespace BookRecords.Controllers
             {
                 return UnprocessableEntity(validateRefreshTokenResponse);
             }
-
-            var tokenResponse = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.Iduser);
+            var tmpuser = new User
+            {
+                Iduser = validateRefreshTokenResponse.Iduser,
+            };
+            var tokenResponse = await _tokenService.GenerateTokensAsync(tmpuser);
+            //var tokenResponse = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.Iduser);
 
             return Ok(new { AccessToken = tokenResponse.Item1, Refreshtoken = tokenResponse.Item2 });
         }

@@ -47,7 +47,7 @@ namespace BookRecords.Services
 
                 };
             }
-            var token = await System.Threading.Tasks.Task.Run(() => _tokenService.GenerateTokensAsync(user.Iduser));
+            var token = await System.Threading.Tasks.Task.Run(() => _tokenService.GenerateTokensAsync(user));
             return new TokenResponse
             {
                 Success = true,

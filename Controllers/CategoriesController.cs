@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BookRecords.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookRecords.Data.Entities;
 using BookRecords.Interfaces;
 using BookRecords.Responses.Categories;
-using BookRecords.Responses.Books;
-using BookRecords.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
 

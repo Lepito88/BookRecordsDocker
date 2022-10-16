@@ -6,7 +6,7 @@ namespace BookRecords.Interfaces
 {
     public interface ITokenService
     {
-        Task<Tuple<string, string>> GenerateTokensAsync(int Iduser);
+        Task<Tuple<string, string>> GenerateTokensAsync(User user);
         Task<ValidateRefreshTokenResponse> ValidateRefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
         Task<bool> RemoveRefreshTokenAsync(User user);
     }

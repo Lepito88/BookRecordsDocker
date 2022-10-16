@@ -3,16 +3,16 @@ using BookRecords.Data.Entities;
 using BookRecords.Interfaces;
 using BookRecords.Responses.Users;
 using BookRecords.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookRecords.Controllers
 {
     //This controller contains basig CRUD METHODS for User class, (For the admin)
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
-        
-        
         private readonly IUserService _userService;
         public UsersController(IUserService userService)
         {

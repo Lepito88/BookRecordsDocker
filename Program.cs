@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,8 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddAuthorization(options =>
 //{
 //    options.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
-//});
+////});
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -33,9 +36,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = TokenHelper.Issuer,
-                ValidAudience = TokenHelper.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(TokenHelper.Secret))
+                ValidIssuer = builder.Configuration["AppSettings:JWT_Issuer"],
+                ValidAudience = builder.Configuration["AppSettings:JWT_Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["AppSettings:JWT_Secret"]))
             };
 
         });
@@ -60,7 +63,7 @@ builder.Services.AddTransient<IEntityRelationShipManagerService, EntityRelationS
 
 builder.Services.AddDbContext<bookrecordsContext>(
     DbContextOptions => DbContextOptions
-        .UseMySql(Environment.GetEnvironmentVariable("DATABASE_URL"), ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DATABASE_URL")))
+        .UseMySql(builder.Configuration["AppSettings:MySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:MySqlConnection"]))
         //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         //.UseSqlServer(connectionString)
         // The following three options help with debugging, but should
@@ -73,6 +76,8 @@ builder.Services.AddDbContext<bookrecordsContext>(
 
 builder.Services.AddCors();
 
+builder.Configuration.AddEnvironmentVariables()
+                     .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -80,12 +85,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.Use(async (contex, next) =>
-    {
-        MyEnvironment.SetMySQLConnention();
-        await next();
-    }
-   );
+   // app.Use(async (contex, next) =>
+   // {
+   //     EnvironmentVariables.InitializeEnvironmentVariables();
+   //     await next();
+   // }
+   //);
 }
 app.UseCors(builder =>
 {
