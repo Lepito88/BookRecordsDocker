@@ -8,9 +8,9 @@ namespace BookRecords.Services
 {
     public class EntityRelationShipManagerService : IEntityRelationShipManagerService
     {
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
 
-        public EntityRelationShipManagerService(bookrecordsContext context)
+        public EntityRelationShipManagerService(BookRecordsContext context)
         {
             _context = context;
         }

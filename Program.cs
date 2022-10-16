@@ -61,7 +61,7 @@ builder.Services.AddTransient<IEntityRelationShipManagerService, EntityRelationS
 //var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 
-builder.Services.AddDbContext<bookrecordsContext>(
+builder.Services.AddDbContext<BookRecordsContext>(
     DbContextOptions => DbContextOptions
         //.UseMySql(builder.Configuration["AppSettings:MySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:MySqlConnection"]))
         .UseMySql(builder.Configuration["AppSettings:QnapMySqlConnection"], ServerVersion.AutoDetect(builder.Configuration["AppSettings:QnapMySqlConnection"]))

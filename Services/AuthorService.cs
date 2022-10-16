@@ -11,9 +11,9 @@ namespace BookRecords.Services
 
     public class AuthorService : IAuthorService
     {
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
 
-        public AuthorService(bookrecordsContext context)
+        public AuthorService(BookRecordsContext context)
         {
             _context = context;
         }

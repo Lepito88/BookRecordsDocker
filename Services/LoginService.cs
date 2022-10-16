@@ -10,10 +10,10 @@ namespace BookRecords.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
         private readonly ITokenService _tokenService;
 
-        public LoginService(bookrecordsContext context, ITokenService tokenService)
+        public LoginService(BookRecordsContext context, ITokenService tokenService)
         {
             _context = context;
             _tokenService = tokenService;

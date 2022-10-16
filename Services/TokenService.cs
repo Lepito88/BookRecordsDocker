@@ -11,10 +11,10 @@ namespace BookRecords.Services
     public class TokenService : ITokenService
     {
 
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
         private readonly IConfiguration _configuration;
 
-        public TokenService(bookrecordsContext context, IConfiguration configuration)
+        public TokenService(BookRecordsContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;

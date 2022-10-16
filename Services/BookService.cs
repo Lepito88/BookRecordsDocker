@@ -9,9 +9,9 @@ namespace BookRecords.Services
 {
     public class BookService : IBookService
     {
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
 
-        public BookService(bookrecordsContext context)
+        public BookService(BookRecordsContext context)
         {
             _context = context;
         }

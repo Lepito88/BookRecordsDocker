@@ -8,9 +8,9 @@ namespace BookRecords.Services
 {
     public class UserService : IUserService
     {
-        private readonly bookrecordsContext _context;
+        private readonly BookRecordsContext _context;
 
-        public UserService(bookrecordsContext context)
+        public UserService(BookRecordsContext context)
         {
             _context = context;
         }
