@@ -16,15 +16,14 @@ Tasks to do:
 - Get book's categories (Categories that book belongs to) [DONE], GetBookById shows book's authors, categories
 - Simple username & password login [DONE]
 
-- Login method => e.g. Ask username & password => Validate them and check if they exists => create JWT token => return it. [DONE]
-- Logout method => revoke JWT token or delete from local storage etc. [DONE]
-- Think about ENDPOINT URLs for Adding/removing author,category,book etc
+- Login method (JWT Accesstoken + Refreshtoken) [DONE]
+- Logout method => revoke JWT token [DONE]
+- Moved Sensitive information to User secrets file that is stored elsewhere. (Secrets.json)
 
 ## Medium => if there is time
 - JWT token creation & validation (Belongs to login & logout) [DONE]
 - Input validation
 - Null value validation & Handling & checking. => DATABASE null value handling
-- Database securing?? => e.g. environment variables, connection strings etc.
 - Possible roles (User, Admin, etc.)
 - Double value checking when creating Database objects => no double values in DB
 - Data validation => Are all parameters valid etc.

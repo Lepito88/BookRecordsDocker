@@ -9,11 +9,13 @@ using BookRecords.Data;
 using BookRecords.Data.Entities;
 using BookRecords.Interfaces;
 using BookRecords.Responses.Authors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : BaseApiController
     {
         

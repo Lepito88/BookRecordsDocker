@@ -49,6 +49,7 @@ namespace BookRecords.Controllers
             return Ok(loginResponse);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("refresh_token")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)

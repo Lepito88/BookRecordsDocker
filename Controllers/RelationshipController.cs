@@ -1,4 +1,5 @@
 ﻿using BookRecords.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,7 @@ namespace BookRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RelationshipController : ControllerBase
     {
         private readonly IEntityRelationShipManagerService _relationshipManagerService;

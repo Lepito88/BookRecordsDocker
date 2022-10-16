@@ -11,11 +11,13 @@ using BookRecords.Interfaces;
 using BookRecords.Responses.Authors;
 using BookRecords.Responses.Books;
 using BookRecords.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
