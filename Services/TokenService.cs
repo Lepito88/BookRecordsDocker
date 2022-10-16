@@ -12,10 +12,12 @@ namespace BookRecords.Services
     {
 
         private readonly bookrecordsContext _context;
+        private readonly IConfiguration _configuration;
 
-        public TokenService(bookrecordsContext context)
+        public TokenService(bookrecordsContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<Tuple<string, string>> GenerateTokensAsync(User user)
@@ -26,8 +28,8 @@ namespace BookRecords.Services
             {
                 return null;
             }
-
-            var accessToken = await TokenHelper.GenerateAccessToken(userRecord);
+            var tokenHelper = new TokenHelper(_configuration);
+            var accessToken = await tokenHelper.GenerateAccessToken(userRecord);
             var refreshToken = await TokenHelper.GenerateRefreshToken();
 
 

@@ -24,7 +24,9 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORT": "44360",
-        "ASPNETCORE_HTTP_PORT": "44361"
+        "ASPNETCORE_HTTP_PORT": "44361",
+        "DATABASE_URL": "server=host.docker.internal;user id=root;password=test;port=3306;database=bookrecords;",
+        
       },
       "publishAllPorts": true,
       "useSSL": true,
